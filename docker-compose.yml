@@ -11,7 +11,7 @@ services:
   dozzle:
     image: amir20/dozzle
     ports:
-      - 8080:8080
+      - 8090:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - dozzle-data:/app/data
@@ -31,6 +31,14 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  proxy:
+    container_name: "reverse-proxy"
+    image: nginx
+    ports:
+      - 8080:80
+    volumes:
+      - ./static/:/usr/share/nginx/html:ro
+      - ./conf.d:/etc/nginx/conf.d:ro
 
 volumes:
   dozzle-data:
