@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 30
+    # Watchtower will check for updates every 30 seconds
+
+  dozzle:
+    image: amir20/dozzle
+    ports:
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - dozzle-data:/app/data
+
+  managment-service:
+    image: ghcr.io/micaeladominguez/snippet-managment-service-snippet:0.0.1
+
+  db:
+    container_name: postgres_db
+    image: postgres:12
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: compose-db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+
+volumes:
+  dozzle-data:
+  pgdata:
+    external: false
+
