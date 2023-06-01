@@ -18,6 +18,9 @@ services:
 
   managment-service:
     image: ghcr.io/micaeladominguez/snippet-managment-service-snippet:0.0.1
+   
+  manage-repositories:
+    image: ghcr.io/micaeladominguez/snippet-manage-repositories:0.0.1
 
   db:
     container_name: postgres_db
