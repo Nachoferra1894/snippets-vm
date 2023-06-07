@@ -16,11 +16,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - dozzle-data:/app/data
 
-  managment-service:
-    image: ghcr.io/micaeladominguez/snippet-managment-service-snippet:0.0.1
+  # managment-service:
+  #   image: ghcr.io/micaeladominguez/snippet-managment-service-snippet:0.0.1
    
-  manage-repositories:
-    image: ghcr.io/micaeladominguez/snippet-manage-repositories:0.0.1
+  # manage-repositories:
+  #   image: ghcr.io/micaeladominguez/snippet-manage-repositories:0.0.1
 
   db:
     container_name: postgres_db
@@ -42,13 +42,14 @@ services:
     volumes:
       - ./static/:/usr/share/nginx/html:ro
       - ./conf.d/:/etc/nginx/conf.d/:ro
-      - ./certbot/conf:/etc/letsencrypt/:ro
-      - ./var/www/certbot/:/var/www/certbot/:ro
+      - /etc/letsencrypt/live/printscriptsnippets.ddns.net:/etc/letsencrypt/live/printscriptsnippets.ddns.net:ro
+      - /etc/letsencrypt/archive/printscriptsnippets.ddns.net:/etc/letsencrypt/archive/printscriptsnippets.ddns.net:ro
+      - /etc/letsencrypt/acme-challenge:/etc/letsencrypt/acme-challenge:ro
 
-  certbot:
-    image: certbot/certbot:latest
-    volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
+  # certbot:
+  #   image: certbot/certbot:latest
+  #   volumes:
+  #     - ./certbot/www/:/var/www/certbot/:rw
 volumes:
   dozzle-data:
   pgdata:
