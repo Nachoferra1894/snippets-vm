@@ -8,17 +8,17 @@ services:
     command: --interval 30
     # Watchtower will check for updates every 30 seconds
 
-  dozzle:
-    image: amir20/dozzle
-    ports:
-      - 8080:8080
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - dozzle-data:/app/data
+#  dozzle:
+#    image: amir20/dozzle
+#    ports:
+#      - 8080:8080
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - dozzle-data:/app/data
 
   # managment-service:
   #   image: ghcr.io/micaeladominguez/snippet-managment-service-snippet:0.0.1
-   
+
   # manage-repositories:
   #   image: ghcr.io/micaeladominguez/snippet-manage-repositories:0.0.1
 
@@ -46,12 +46,27 @@ services:
       - /etc/letsencrypt/archive/printscriptsnippets.ddns.net:/etc/letsencrypt/archive/printscriptsnippets.ddns.net:ro
       - /etc/letsencrypt/acme-challenge:/etc/letsencrypt/acme-challenge:ro
 
+  datadog-agent:
+    image: datadog/agent:latest
+    container_name: datadog-agent
+    environment:
+      - DD_API_KEY=${DD_API_KEY}
+      - DD_LOGS_ENABLED=${DD_LOGS_ENABLED}
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=${DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL}
+      - DD_CONTAINER_EXCLUDE_LOGS=${DD_CONTAINER_EXCLUDE_LOGS}
+      - DD_SITE=${DD_SITE}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+      - datadog-agent-run:/opt/datadog-agent/run:rw
   # certbot:
   #   image: certbot/certbot:latest
   #   volumes:
   #     - ./certbot/www/:/var/www/certbot/:rw
 volumes:
   dozzle-data:
+  datadog-agent-run:
   pgdata:
     external: false
 
