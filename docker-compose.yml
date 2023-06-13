@@ -28,9 +28,11 @@ services:
     volumes:
       - ./static/:/usr/share/nginx/html:ro
       - ./conf.d/:/etc/nginx/conf.d/:ro
-      - /etc/letsencrypt/live/printscriptsnippets.ddns.net:/etc/letsencrypt/live/printscriptsnippets.ddns.net:ro
-      - /etc/letsencrypt/archive/printscriptsnippets.ddns.net:/etc/letsencrypt/archive/printscriptsnippets.ddns.net:ro
-      - /etc/letsencrypt/acme-challenge:/etc/letsencrypt/acme-challenge:ro
+      - /etc/letsencrypt/:/etc/letsencrypt/:ro
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
 
   datadog-agent:
     image: datadog/agent:latest
@@ -51,6 +53,8 @@ services:
      image: certbot/certbot:latest
      volumes:
        - ./certbot/www/:/var/www/certbot/:rw
+       - ./certbot/conf/:/etc/letsencrypt/:rw
+     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 volumes:
   dozzle-data:
   datadog-agent-run:
