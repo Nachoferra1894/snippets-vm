@@ -8,20 +8,6 @@ services:
     command: --interval 30
     # Watchtower will check for updates every 30 seconds
 
-#  dozzle:
-#    image: amir20/dozzle
-#    ports:
-#      - 8080:8080
-#    volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock
-#      - dozzle-data:/app/data
-
-  # managment-service:
-  #   image: ghcr.io/micaeladominguez/snippet-managment-service-snippet:0.0.1
-
-  # manage-repositories:
-  #   image: ghcr.io/micaeladominguez/snippet-manage-repositories:0.0.1
-
   db:
     container_name: postgres_db
     image: postgres:12
@@ -60,10 +46,11 @@ services:
       - /proc/:/host/proc/:ro
       - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
       - datadog-agent-run:/opt/datadog-agent/run:rw
-  # certbot:
-  #   image: certbot/certbot:latest
-  #   volumes:
-  #     - ./certbot/www/:/var/www/certbot/:rw
+
+  certbot:
+     image: certbot/certbot:latest
+     volumes:
+       - ./certbot/www/:/var/www/certbot/:rw
 volumes:
   dozzle-data:
   datadog-agent-run:
