@@ -23,4 +23,4 @@ jobs:
           script: |
             cd ingsis
             git pull origin dev
-            docker-compose up -d
+            docker compose up -d
