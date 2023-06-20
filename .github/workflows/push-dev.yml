@@ -24,4 +24,4 @@ jobs:
           script: |
             cd ingsis/snippets-vm
             git pull origin dev
-            docker compose up -d
+            make dev -d

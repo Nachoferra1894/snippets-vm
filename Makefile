@@ -4,4 +4,7 @@ dev:
 prod:
 	docker compose -f docker-compose.yml -f docker-compose.prod.yml up
 
-.PHONY: dev prod
+down:
+	docker compose down
+
+.PHONY: dev prod down

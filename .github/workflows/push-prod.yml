@@ -24,4 +24,4 @@ jobs:
           script: |
             cd ingsis/snippets-vm
             git pull origin master
-            docker compose up -d
+            make prod -d

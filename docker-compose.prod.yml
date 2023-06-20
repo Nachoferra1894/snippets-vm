@@ -2,15 +2,31 @@ version: '3'
 
 services:
   db:
+    container_name: postgres_db
+    image: postgres:12
+    ports:
+      - 5433:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: compose-db-prod
+      POSTGRES_DB: compose-db
 
   nginx:
+    image: nginx:latest
+    ports:
+      - '80:80'
+      - '443:443'
     volumes:
       - ./static/:/usr/share/nginx/html:ro
       - ./conf.d/:/etc/nginx/conf.d/:ro
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-      - /var/www:/var/www:ro
+      - /etc/letsencrypt/:/etc/letsencrypt/:ro
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+
+volumes:
+  pgdata:
+    external: false
