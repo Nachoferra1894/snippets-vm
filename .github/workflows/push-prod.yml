@@ -1,21 +1,21 @@
-name: Deploy to dev VM
+name: Deploy to prod VM
 
 on:
   push:
     branches:
-      - dev
+      - master
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: dev
+    environment: prod
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Connect to VM and run commands
-        uses: appleboy/ssh-action@v0.1.10
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USERNAME }}
@@ -23,5 +23,5 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ingsis/snippets-vm
-            git pull origin dev
+            git pull origin master
             docker compose up -d
