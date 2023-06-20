@@ -6,30 +6,11 @@ services:
     image: postgres:12
     ports:
       - 5433:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: compose-db-prod
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  nginx:
-    image: nginx:latest
-    ports:
-      - '80:80'
-      - '443:443'
-    volumes:
-      - ./static/:/usr/share/nginx/html:ro
-      - ./conf.d/:/etc/nginx/conf.d/:ro
-      - /etc/letsencrypt/:/etc/letsencrypt/:ro
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-
-
   datadog-agent:
     image: datadog/agent:latest
-    container_name: datadog-agent
     environment:
       - DD_API_KEY=${DD_API_KEY}
       - DD_LOGS_ENABLED=${DD_LOGS_ENABLED}
@@ -42,14 +23,7 @@ services:
       - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
       - datadog-agent-run:/opt/datadog-agent/run:rw
 
-  certbot:
-     image: certbot/certbot:latest
-     volumes:
-       - ./certbot/www/:/var/www/certbot/:rw
-       - ./certbot/conf/:/etc/letsencrypt/:rw
-     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 volumes:
-  dozzle-data:
   datadog-agent-run:
   pgdata:
     external: false
