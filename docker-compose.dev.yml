@@ -8,8 +8,21 @@ services:
       POSTGRES_DB: compose-db-dev
 
   nginx:
+    image: nginx:latest
+    ports:
+      - '80:80'
+      - '443:443'
     volumes:
       - ./static/:/usr/share/nginx/html:ro
       - ./dev.conf.d/:/etc/nginx/conf.d/:ro
-      - /var/www:/var/www:ro
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+      - /etc/letsencrypt/:/etc/letsencrypt/:ro
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+
+  certbot:
+    image: certbot/certbot:latest
+    # command: docker compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ --dry-run -d  snippetsps-dev.ddns.net
+    volumes:
+      - ./certbot/conf/:/etc/letsencrypt
+      - ./certbot/logs/:/var/log/letsencrypt
+      - ./certbot/data:/usr/share/nginx/html/letsencrypt
