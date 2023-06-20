@@ -1,13 +1,6 @@
 version: '3'
 
 services:
-  watchtower:
-    image: containrrr/watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 30
-    # Watchtower will check for updates every 30 seconds
-
   db:
     container_name: postgres_db
     image: postgres:12
@@ -16,7 +9,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: compose-db
+      POSTGRES_DB: compose-db-prod
     volumes:
       - pgdata:/var/lib/postgresql/data
 
