@@ -1,9 +1,9 @@
-name: Deploy to prod VM
+name: Deploy to dev VM
 
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   deploy:
