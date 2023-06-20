@@ -21,6 +21,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd path/to/repository
+            cd ingsis
             git pull origin main
             docker-compose up -d
