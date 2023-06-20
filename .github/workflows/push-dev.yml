@@ -22,6 +22,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd ingsis
+            cd ingsis/snippets-vm
             git pull origin dev
             docker compose up -d
