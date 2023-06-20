@@ -33,3 +33,8 @@ services:
       - ./certbot/conf/:/etc/letsencrypt
       - ./certbot/logs/:/var/log/letsencrypt
       - ./certbot/data:/usr/share/nginx/html/letsencrypt
+
+
+volumes:
+  pgdata:
+    external: false
