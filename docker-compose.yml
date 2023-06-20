@@ -18,14 +18,6 @@ services:
     ports:
       - '80:80'
       - '443:443'
-    volumes:
-      - ./static/:/usr/share/nginx/html:ro
-      - ./conf.d/:/etc/nginx/conf.d/:ro
-      - /etc/letsencrypt/:/etc/letsencrypt/:ro
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-
 
   datadog-agent:
     image: datadog/agent:latest

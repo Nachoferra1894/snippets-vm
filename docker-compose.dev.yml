@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  db:
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: compose-db-dev
+
+  nginx:
+    volumes:
+      - ./static/:/usr/share/nginx/html:ro
+      - ./dev.conf.d/:/etc/nginx/conf.d/:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www:/var/www:ro
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
