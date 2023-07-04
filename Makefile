@@ -1,6 +1,9 @@
 dev:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 
+pull:
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml pull
+
 ddown:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml down
 
