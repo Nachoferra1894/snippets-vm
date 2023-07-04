@@ -1,6 +1,12 @@
 version: '3'
 
 services:
+ # Testing scripts
+  api:
+    container_name: api
+    image: ghcr.io/micaeladominguez/snippet-ui-managmet:0.0.1
+    ports:
+      - "8095:8080"
 
   # Testing scripts
   testing-scripts:
