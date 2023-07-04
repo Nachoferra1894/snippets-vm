@@ -1,21 +1,110 @@
 version: '3'
 
 services:
+
+  # Testing scripts
+  testing-scripts:
+    container_name: testing-scripts
+    image: ghcr.io/micaeladominguez/snippet-testing-scripts:0.0.1
+    ports:
+      - "8080:8080"
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: testing_scripts_db
+      DB_HOST: testing-db
+      DB_PORT: 5432
+      DATADOG_API_KEY: ${DD_API_KEY}
+    depends_on:
+      testing-db:
+        condition: service_healthy
+
+  testing-db:
+    container_name: testing-db
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./testing-logs:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: testing_scripts_db
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "testing_scripts_db" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+
+  # Manage repositories
   manage-repositories:
+    container_name: manage-repositories
     image: ghcr.io/micaeladominguez/snippet-manage-repositories:0.0.1
     ports:
       - "8081:8080"
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: manage_repositories_db
+      DB_HOST: repos-db
+      DB_PORT: 5432
+      DATADOG_API_KEY: ${DD_API_KEY}
+    depends_on:
+      repos-db:
+        condition: service_healthy
 
-  testing-scripts:
-    image: ghcr.io/micaeladominguez/snippet-testing-scripts:0.0.1
+  repos-db:
+    container_name: repos-db
+    image: postgres:12
     ports:
-      - "8082:8080"
+      - "5433:5432"
+    volumes:
+      - ./testing-logs:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: manage_repositories_db
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "manage_repositories_db" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
 
+  # Snippet management service
   management-service:
+    container_name: management-service
     image: ghcr.io/micaeladominguez/snippet-managment-service-snippet:0.0.1
     ports:
-      - "8083:8080"
+      - "8082:8080"
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: snippet_db
+      DB_HOST: management-db
+      DB_PORT: 5432
+      DATADOG_API_KEY: ${DD_API_KEY}
+    depends_on:
+      management-db:
+        condition: service_healthy
 
+  management-db:
+    container_name: management-db
+    image: postgres:12
+    ports:
+      - "5430:5432"
+    volumes:
+      - ./management-logs:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: snippet_db
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "snippet_db" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+
+  # Datadog agent
   datadog-agent:
     image: datadog/agent:latest
     environment:
@@ -32,3 +121,5 @@ services:
 
 volumes:
   datadog-agent-run:
+  pgdata:
+

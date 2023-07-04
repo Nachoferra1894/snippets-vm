@@ -1,10 +1,13 @@
 dev:
-	docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+ddown:
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml down
 
 prod:
 	docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
-down:
-	docker compose down
+pdown:
+	docker compose -f docker-compose.yml -f docker-compose.prod.yml down
 
-.PHONY: dev prod down
+.PHONY: dev prod ddown pdown

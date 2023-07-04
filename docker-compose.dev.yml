@@ -8,18 +8,6 @@ services:
     command: --interval 30
     # Watchtower will check for updates every 30 seconds
 
-  db:
-    container_name: postgres_db
-    image: postgres:12
-    ports:
-      - 5433:5432
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: compose-db
-
   nginx:
     image: nginx:latest
     ports:
@@ -32,6 +20,11 @@ services:
       - ./certbot/www:/var/www/certbot/:ro
       - ./certbot/conf/:/etc/nginx/ssl/:ro
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    depends_on:
+      - certbot
+#      - manage-repositories
+      - testing-scripts
+#      - management-service
 
   certbot:
     image: certbot/certbot:latest
