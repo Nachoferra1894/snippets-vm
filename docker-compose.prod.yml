@@ -1,17 +1,18 @@
 version: '3'
 
 services:
-  db:
-    container_name: postgres_db
-    image: postgres:12
-    ports:
-      - 5433:5432
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+  frontend:
+    container_name: frontend
+    image: ghcr.io/micaeladominguez/snippets-front:0.0.1
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: compose-db
+      NEXT_PUBLIC_API_URL: https://snippetsps.ddns.net
+      AUTH0_SECRET: f9f87b9d308a5ce9c5956309b434da2c2dc25fa086e76cce8264ea478fa4fa4f
+      AUTH0_BASE_URL: http://localhost:3000
+      AUTH0_ISSUER_BASE_URL: https://dev-c4l43o2ndcdikqar.us.auth0.com
+      AUTH0_CLIENT_ID: 1E4bHwGjDsGhgkLHcrlk0xemreuSXpnd
+      AUTH0_CLIENT_SECRET: ZKsew2YqkwLT2MA9NpaFGQSHIMckYdhwCxl7HFkxt4aFjAizI1RTbR0gX0ooLf2j
+    ports:
+      - "3000:3000"
 
   nginx:
     image: nginx:latest
@@ -25,6 +26,8 @@ services:
       - ./certbot/www:/var/www/certbot/:ro
       - ./certbot/conf/:/etc/nginx/ssl/:ro
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    depends_on:
+      - testing-scripts
 
 
 volumes:
