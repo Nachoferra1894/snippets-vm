@@ -1,19 +1,6 @@
 version: '3'
 
 services:
-  frontend:
-    container_name: frontend
-    image: ghcr.io/micaeladominguez/snippets-front:0.0.1
-    environment:
-      NEXT_PUBLIC_API_URL: https://snippetsps-dev.ddns.net
-      AUTH0_SECRET: f9f87b9d308a5ce9c5956309b434da2c2dc25fa086e76cce8264ea478fa4fa4f
-      AUTH0_BASE_URL: http://localhost:3000
-      AUTH0_ISSUER_BASE_URL: https://dev-c4l43o2ndcdikqar.us.auth0.com
-      AUTH0_CLIENT_ID: 1E4bHwGjDsGhgkLHcrlk0xemreuSXpnd
-      AUTH0_CLIENT_SECRET: ZKsew2YqkwLT2MA9NpaFGQSHIMckYdhwCxl7HFkxt4aFjAizI1RTbR0gX0ooLf2j
-    ports:
-      - "3000:3000"
-
   watchtower:
     image: containrrr/watchtower
     volumes:
