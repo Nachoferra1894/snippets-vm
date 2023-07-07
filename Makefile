@@ -4,6 +4,9 @@ dev:
 pull:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml pull
 
+restart:
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml restart
+
 ddown:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml down
 
@@ -13,4 +16,4 @@ prod:
 pdown:
 	docker compose -f docker-compose.yml -f docker-compose.prod.yml down
 
-.PHONY: dev prod ddown pdown
+.PHONY: dev prod ddown pdown restart pull
