@@ -13,6 +13,12 @@ services:
     ports:
       - "3000:3000"
 
+  redis:
+    container_name: redis
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+
  # Testing scripts
   api-service:
     container_name: api-service
@@ -101,6 +107,7 @@ services:
       DB_HOST: management-db
       DB_PORT: 5432
       DATADOG_API_KEY: ${DD_API_KEY}
+      REDIS_HOST: redis
     depends_on:
       management-db:
         condition: service_healthy
