@@ -13,7 +13,13 @@ ddown:
 prod:
 	docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
+ppull:
+	docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
+
 pdown:
 	docker compose -f docker-compose.yml -f docker-compose.prod.yml down
 
-.PHONY: dev prod ddown pdown restart pull
+prestart:
+	docker compose -f docker-compose.yml -f docker-compose.prod.yml restart
+
+.PHONY: dev prod ddown pdown restart pull ppull pdown prestart
