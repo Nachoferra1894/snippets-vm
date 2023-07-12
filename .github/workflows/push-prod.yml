@@ -24,4 +24,5 @@ jobs:
           script: |
             cd ingsis/snippets-vm
             git pull origin master
-            make prod -d
+            make ppull
+            make prod
