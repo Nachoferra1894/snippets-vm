@@ -14,7 +14,18 @@ services:
       - ./certbot/conf/:/etc/nginx/ssl/:ro
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     depends_on:
+      - manage-repositories
       - testing-scripts
+      - management-service
+  
+  certbot:
+    image: certbot/certbot:latest
+    # command: docker compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ --dry-run -d  snippetsps-dev.ddns.net
+    volumes:
+      - ./certbot/conf/:/etc/letsencrypt
+      - ./certbot/logs/:/var/log/letsencrypt
+      - ./certbot/data:/usr/share/nginx/html/letsencrypt
+
 
 
 volumes:

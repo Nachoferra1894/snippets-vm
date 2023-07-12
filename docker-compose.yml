@@ -18,6 +18,8 @@ services:
     image: redis:6-alpine
     ports:
       - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
 
  # Testing scripts
   api-service:
@@ -25,6 +27,9 @@ services:
     image: ghcr.io/micaeladominguez/snippet-ui-managmet:0.0.1
     ports:
       - "8080:8080"
+    environment:
+      AUTH_CLIENT_ID: ${AUTH_CLIENT_ID}
+      AUTH_CLIENT_SECRET: ${AUTH_CLIENT_SECRET}
 
   # Testing scripts
   testing-scripts:
@@ -111,6 +116,9 @@ services:
     depends_on:
       management-db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+      
 
   management-db:
     container_name: management-db
