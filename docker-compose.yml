@@ -18,6 +18,8 @@ services:
     image: redis:6-alpine
     ports:
       - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
 
  # Testing scripts
   api-service:
@@ -111,6 +113,9 @@ services:
     depends_on:
       management-db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+      
 
   management-db:
     container_name: management-db
